@@ -2,8 +2,8 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
-import { map, mergeMap, groupBy } from 'rxjs/operators';
-import { RoverImage } from '../models/rover-image.model';
+import { RoverCuriosityPhotosSolResponse } from '../models/rover-curiosity-photos-sol-response.model';
+import { RoverCuriosityPhotosSolRequest } from '../models/rover-curiosity-photos-sol-request.model';
 
 @Injectable()
 export class RoverService {
@@ -17,16 +17,11 @@ export class RoverService {
     this.httpClient.get(``);
   }
 
-  fetchImagesBySol(sol: number): Observable<object> {
-    return this.httpClient
-      .get<object>(`${this.URL}sol=${sol}&api_key=${this.API_KEY}&page=1`)
-      .pipe(
-        // map((res: RoverImage[]) => {
-        //   return res['photos'];
-        // })
-        groupBy((res => res) => {
-return res;
-        })
-      );
+  fetchImages(
+    request: RoverCuriosityPhotosSolRequest
+  ): Observable<RoverCuriosityPhotosSolResponse> {
+    return this.httpClient.get<RoverCuriosityPhotosSolResponse>(
+      `${this.URL}sol=${request.sol}&api_key=${this.API_KEY}&page=1`
+    );
   }
 }
